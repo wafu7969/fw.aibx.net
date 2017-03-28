@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+       <head>
+              <meta charset="utf-8">
+              <title>{$Think.config.sitename}</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+              <meta name="apple-mobile-web-app-capable" content="yes">
+              <meta name="apple-mobile-web-app-status-bar-style" content="black">
+              <meta name="format-detection" content="telephone=no">
+              <link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+              <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/icons-extra.css" />
+              <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/style.css"/>
+       </head>
+
+       <body>
+        <header class="mui-bar mui-bar-nav">
+           <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+           <h1 class="mui-title">我的购买记录</h1>
+        </header>
+        <div class="indexCont" style=" padding-top:60px;">
+                {neq name='orders' value=''}
+                {volist name='orders' id='vo'}
+                <div class="inlist" onClick="window.location.href='{:url('currIndex',array('id'=>$vo.curr_id))}'">
+                      <div class="yyimg"><img src="{$vo.pic}" /><img class="erji" src="{$Think.HTML_STATIC}/images/erji.png"/></div>
+                      <div class="yyinfo">
+                            <div class="yytitle">{$vo.title}</div>
+                            <div class="yyit">
+                                  <div class="yyitleft">
+                                        <div class="yypl price">￥{$vo.price}</div>
+                                  </div>
+                                  <div class="yyitright">{$vo.create_time|date='Y-m-d',###}</div>
+                            </div>
+                      </div>
+                </div>
+                {/volist}
+                {else/}
+                <p class="tseminfo">您还没有购买记录哦~~</p>
+                {/neq}
+        </div>
+
+       <script src="{$Think.HTML_STATIC}/js/mui.min.js"></script>
+       </body>
+</html>

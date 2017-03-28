@@ -1,0 +1,365 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" id="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>{$Think.config.sitename}</title>
+<link href="{$Think.HTML_STATIC}/css/style.css?v=1.1.0" rel="stylesheet">
+<link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+<style type="text/css">
+.topimg img{width:100%;}
+audio {
+	width: 0px;
+	height: 0px;
+	visibility: hidden;
+}
+.cover {
+	padding:10px 0;
+	background-color: #ddd;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.cover .content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 160px;
+	height: 160px;
+}
+.cover .acplayer-paused span {
+	width: 0;
+	height: 0;
+	border: 0.5em solid transparent;
+	border-right: none;
+	border-left-color: #fff;
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -0.5em 0 0 -0.25em;
+}
+
+.cover .acplayer-playing span:before {
+	left: 8px;
+}
+.cover .acplayer-playing span:after {
+	right: 8px;
+}
+.cover .acplayer-playing span:before, .cover .acplayer-playing span:after {
+	width: 6px;
+	height: 20px;
+	background-color: #fff;
+	content: '';
+	position: absolute;
+	top: 7px;
+}
+.cover .content .center {
+	position: absolute;
+	top: 61px;
+	left: 61px;
+	background-color: #444;
+	width: 34px;
+	height: 34px;
+	border: 2px solid #6c6971;
+	border-radius: 50%;
+	opacity: .9;
+}
+.cover .content img {
+	border-radius: 50%;
+	border: 5px solid #fff;
+	width: 150px;
+	height: 150px;
+}
+.cover .content .rotate-img {
+	-webkit-animation: music_disc 20s linear infinite;
+	animation: music_disc 20s linear infinite;
+	animation-play-state: paused;
+	-webkit-animation-play-state: paused; /* Safari 和 Chrome */
+}
+/*css3动画的旋转*/
+@-webkit-keyframes music_disc {
+	0% {
+			transform: rotate(0deg);
+	   }
+	100%
+	   {
+			transform:rotate(360deg);
+	   }
+}
+.audioplayer {
+	height: 6px;
+	border: none;
+	box-shadow: none;
+	background: #fff;
+	position: relative;
+}
+.audioplayer-bar {
+	right: 0 !important;
+    left: 0 !important;
+    height: 14px !important;
+    box-shadow: none;
+    border-radius: 0;
+    position: absolute;
+    top: -7px;
+}
+.audioplayer-bar .audioplayer-bar-content {
+    width: 100%;
+    height: 3px;
+    background-color: #D9D9D9;
+    position: absolute;
+    top: 7px;
+}
+.audioplayer-bar-played {
+	background: deepskyblue;
+	border-radius: 0 !important;
+	width:0;
+	min-width: 8px;
+	height: 3px !important;
+	display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.audioplayer-bar-played:after {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	content: '';
+	background-color: deepskyblue;
+}
+.audioplayer-time {
+	position: absolute;
+	font-size: 9px;
+	color: #fff;
+	text-shadow: 1px 1px 2px #000;
+}
+.audioplayer-time-current {
+	border: none;
+	left: 10px;
+	top: -20px;
+	font-size: 14px;
+}
+.audioplayer-time-duration {
+	border: none;
+	right: 10px;
+	top: -20px;
+	font-size: 14px;
+}
+.audioplayer-bar {
+	right: 3.875em;
+	left: 3.875em;
+}
+.audioplayer-time {
+	width: auto;
+}
+</style>
+</head>
+
+<body>
+<!--https://github.com/zhangwei900808/AcPlayer-->
+<div class="">
+     <section class="cover">
+        <div class="content">
+          <img id="img-rotate" class="rotate-img" src="{$cont_voice.pic}" />
+          <a id="playpause" href="#" class="center acplayer-paused">
+            <span></span>
+          </a>
+        </div>
+      </section>
+      <div class="audioplayer">
+        <audio preload="auto" controls autoplay="autoplay">
+            <source src="{$cont_voice.voice}">
+       </audio>
+        <div class="audioplayer-time audioplayer-time-current" data='0'></div>
+        <div class="audioplayer-bar">
+          <div class="audioplayer-bar-content">
+            <div class="audioplayer-bar-loaded" style="width: 100%;"></div>
+            <div class="audioplayer-bar-played"></div>
+          </div>
+        </div>
+        <div class="audioplayer-time audioplayer-time-duration"></div>
+      </div>
+</div>
+<div class="vmain">
+     <div class="vtitle">{$cont_voice.title}</div>
+     <div class="vinfo"><div class="vtime">{$cont_voice.create_time|date='Y-m-d',###}</div><div class="yypl price">{eq name="cont_voice.type" value='2'}{else}<font>免费</font>{/eq}</div><div class="yypl pficon"> {$cont_voice.click}</div><div class="yypl plicon"> {$commentTotalNum}</div></div>
+     <div class="vtext">{$cont_voice.text}</div>
+</div>
+{neq name='jxCommentNum' value='0'}
+<div class="commtitle">精选评论({$jxCommentNum})</div>
+{volist name='jxComment' id='vo'}
+<div class="commentMain">
+    <div class="uimg"><img src="{$vo.portrait}"/></div>
+    <div class="unamc">
+          <div class="uname">{$vo.wechaname}</div>
+          <div class="ucm">{$vo.text}</div>
+          <div class="ctime">{$vo.create_time|date='Y-m-d',###}</div>
+    </div>
+</div>
+{/volist}
+{/neq}
+
+
+{neq name='commentNum' value='0'}
+<div class="commtitle">最新评论({$commentNum})</div>
+
+{volist name='comment' id='vo'}
+<div class="commentMain">
+    <div class="uimg"><img src="{$vo.portrait}"/></div>
+    <div class="unamc">
+          <div class="uname">{$vo.wechaname}</div>
+          <div class="ucm">{$vo.text}</div>
+          <div class="ctime">{$vo.create_time|date='Y-m-d',###}</div>
+    </div>
+    {neq name='$vo.reply_text' value=''}
+    <div class="unamc hf">
+          <div class="uname">{$Think.config.manageName}</div>
+          <div class="ucm">{$vo.reply_text}</div>
+          <div class="ctime">{$vo.reply_time|date='Y-m-d',###}</div>
+    </div>
+    {/neq}
+</div>
+{/volist}
+<!--下拉加载-->
+<div id="loadinguser"></div>
+{egt name='$commentNum' value='$Think.config.page'}<div id="loading">下拉加载更多...</div>{/egt}
+{/neq}
+
+<div style="height:85px;"></div>
+{eq name='$orders' value='0'}
+<div class="gmkc" onClick="window.location.href='{:url('currIndex',array('id'=>$cont_voice.curr_id))}'">购买该套课程</div>
+<div class="fbpl" id="promptBtn" style="display: none;"><div><font>发表评论</font></div></div>
+{else}
+<div class="fbpl" id="promptBtn"><div><font>发表评论</font></div></div>
+{/eq}
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="{$Think.HTML_STATIC}/js/acplayer.js"></script>
+<script src="{$Think.HTML_STATIC}/js/mui.min.js"></script>
+{include file="index/wxShare" /}
+<script type="text/javascript">
+      mui.init({swipeBack:true});
+      document.getElementById("promptBtn").addEventListener('tap', function(e)
+      {
+                e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
+                var btnArray = ['确定', '取消'];
+                mui.prompt('请输入评论：', '', '', btnArray, function(e)
+                {
+                    if (e.index == 0) 
+                    {
+                        //提交评论
+                        text=e.value;
+                        user_id={$fansInfo.id};
+                        voice_id={$cont_voice.id};
+                        $.ajax(
+                        {
+                            url:"{:url('cont_comment')}",
+                            data:{text:text,user_id:user_id,voice_id:voice_id},
+                            type:'post',
+                            dataType:'json',
+                            success:function(data)
+                            {
+                                if(data.code==1)
+                                {
+                                    mui.alert('提交成功！', function()
+                                    {
+                                        //append(data);
+                                        //window.location.href='{:url("my")}';
+                                    });
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+	  $(function()
+      {
+        var acplayer = $( 'audio' ).acPlayer();
+        try
+          {
+            $('#playpause').click(pafang);
+          } 
+          catch (e)
+          {
+              alert(e.message)
+          }
+          finally{}
+
+          function pafang()
+          {
+              if (acplayer.audioState == "paused")
+              {
+                  
+                  {eq name='$orders' value='0'}
+                  var alertStr="免费只能试听{$Think.config.freeTime|get_minute}哦！";
+                  jctime=setInterval(function()
+                  {
+                   
+                    if($('.audioplayer-time-current').attr('data')>={$Think.config.freeTime})
+                    {
+                      acplayer.pause();
+                      clearInterval(jctime);
+                      mui.alert(alertStr);
+                    }
+                  },100);
+                  {/eq}
+                  acplayer.play();
+              }
+              else
+              {
+                  acplayer.pause();
+              }
+          }
+        //自动播放
+        wx.ready(function(){
+            pafang();
+        });
+          
+      });
+
+   
+
+    {egt name='$commentNum' value='$Think.config.page'}
+      //下拉加载
+      var offsize = {$Think.config.page};//起始位置(查询数据表时的起始位置)
+      var i = 0; //用于防止下拉重复加载相同数据
+      $(document).ready(function(){  
+          var range = 40;//距下边界长度/单位px   
+          var totalheight = 0;
+          var main = $("#loadinguser");//主体元素  
+          $(window).scroll(function()
+          {  
+              var srollPos = $(window).scrollTop();   
+              totalheight = parseFloat($(window).height()) + parseFloat(srollPos); 
+              if(($(document).height()-range) <= totalheight) {
+                  
+                  if(i==0)
+                  {
+                      $('#loading').html("<img src='{$Think.HTML_STATIC}/images/loading.jpg'> 正在努力为您加载...");
+                      i = 1;
+                      $.post("{:url('ajaxGetComm')}",{
+                          offsize:offsize,
+                          id:{$cont_voice.id}
+                          },function(data){
+                              
+                              if(data==0)
+                              {
+                                  $('#loading').html("已为您加载全部");
+                              }else{
+                                  main.append(data);
+                                  offsize = offsize+{$Think.config.page};
+                                  i = 0;
+                              }
+                              
+                      });
+                  }
+              }
+          });  
+      });
+    {/egt}
+  </script>
+</body>
+</html>

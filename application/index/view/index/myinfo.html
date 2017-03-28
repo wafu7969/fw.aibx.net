@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>个人信息</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no">
+        <!--标准mui.css-->
+        <link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+        <!--App自定义的css-->
+        <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/style.css"/>
+    </head>
+
+    <body>
+    <div class="tsinfo">为了更好的为你服务，请完善个人信息！</div>
+    <div class="permain">
+         <ul>
+              <li>
+                   <div class="mctitle"><font>头像</font></div>
+                   <div class="mcvalue"><img style="float: right;" src="{$fansInfo.portrait64}" height="44px;"></div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>昵称</font></div>
+                   <div class="mcvalue">{$fansInfo.wechaname}</div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>性别</font></div>
+                   <div class="mcvalue"><select style="width:31px; height:30px; line-height:30px; padding: 0px; margin: 0px; background:#f8f8f8" name="sex" id="sex"><option value="男" {eq name="$fansInfo.sex" value="男" }selected{/eq}>男</option><option value="女" {eq name="$fansInfo.sex" value="女" }selected{/eq}>女</option></select>
+                   </div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>真实姓名</font></div>
+                   <div class="mcvalue"><input name="truename" id="truename" type="text" value="{$fansInfo.truename}"></div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>生日</font></div>
+                   <div class="mcvalue"><input name="birthday" id="birthday" type="text" value="{$fansInfo.birthday}"></div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>手机号</font></div>
+                   <div class="mcvalue"><input name="tel" id="tel" type="text" value="{$fansInfo.tel}"></div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>公司</font></div>
+                   <div class="mcvalue"><input name="company" id="company" type="text" value="{$fansInfo.company}"></div>
+              </li>
+              <li>
+                   <div class="mctitle"><font>职位</font></div>
+                   <div class="mcvalue"><input name="position" id="position" type="text" value="{$fansInfo.position}"></div>
+              </li>
+         </ul>
+         <input class="butt" type="hidden" value="{$fansInfo.wecha_id}" name="opid" id="opid" />
+         <input class="butt" type="button" value="保存" id="subbutt" />
+    </div>
+    <script src="{$Think.HTML_STATIC}/js/mui.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        mui.init({
+            swipeBack:true //启用右滑关闭功能
+        });
+        $(document).ready(function(){
+          $('#subbutt').click(function(){
+             sex=$('#sex').val();
+             truename=$('#truename').val();
+             birthday=$('#birthday').val();
+             company=$('#company').val();
+             tel=$('#tel').val();
+             position=$('#position').val();
+             wecha_id=$('#opid').val();
+             
+             $.ajax(
+                 {
+                    url:"{:url('myinfoupdate')}",
+                    data:{sex:sex,truename:truename,birthday:birthday,company:company,position:position,wecha_id:wecha_id,tel:tel},
+                    type:'post',
+                    dataType:'json',
+                    success:function(data)
+                    {
+                        if(data.code==1)
+                        {
+                            mui.toast('保存成功！');
+                        }
+                    }
+            });
+          })
+        })
+    </script>
+    </body>
+</html>

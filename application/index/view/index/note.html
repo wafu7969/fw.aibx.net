@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$Think.config.sitename}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!--标准mui.css-->
+<link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/style.css"/>
+</head>
+
+<body>
+<div class="xzt">
+      
+      {volist name='send_infor' id='vo'}
+      <div class="xztlist">
+            <div class="xztimg"><img src="{$Think.HTML_STATIC}/images/xx.jpg" /></div>
+            <div class="xztinfo">
+                  <div class="xztname">{$Think.config.manageName}</div>
+                  <div class="xztmain">{$vo.text}
+                       {neq name='$vo.url' value=''}<div class="xzturl"><a href="{$vo.url}">猛戳这里</a></div>{/neq}
+                  </div>
+                  <div class="xzttime">{$vo.create_time|formatDate}</div>
+            </div>
+      </div>
+      {/volist}
+      <!--下拉加载-->
+      <div id="loadinguser"></div>
+      {egt name='$send_inforNum' value='$Think.config.page'}<div id="loading">下拉加载更多...</div>{/egt}    
+</div>
+      <!--页脚-->
+      {include file="index/footer" /}
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script>
+{egt name='$send_inforNum' value='$Think.config.page'}
+//下拉加载
+var offsize = {$Think.config.page};//起始位置(查询数据表时的起始位置)
+var i = 0; //用于防止下拉重复加载相同数据
+$(document).ready(function(){  
+var range = 0;//距下边界长度/单位px   
+var totalheight = 0;
+var main = $("#loadinguser");//主体元素  
+$(window).scroll(function()
+{  
+    var srollPos = $(window).scrollTop();   
+    totalheight = parseFloat($(window).height()) + parseFloat(srollPos); 
+    if(($(document).height()-range) <= totalheight) {
+        
+        if(i==0)
+        {
+            $('#loading').html("<img src='{$Think.HTML_STATIC}/images/loading.jpg'> 正在努力为您加载...");
+            i = 1;
+            $.post("{:url('ajaxGetNote')}",{
+                offsize:offsize,
+                },function(data){
+                    
+                    if(data==0)
+                    {
+                        $('#loading').html("已为您加载全部");
+                    }else{
+                        main.append(data);
+                        offsize = offsize+{$Think.config.page};
+                        i = 0;
+                    }
+                    
+            });
+        }
+    }
+});  
+});
+{/egt}
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{$title}-{:config('website.webname')}</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$Think.HTML_STATIC}/css/admin.css" rel="stylesheet">
+</head>
+<body class="warp">
+<div id="artlist">
+    <div class="mod kjnav" id="navz">
+        <a href="{:url('nodeAdd')}"><div class="modna">添加节点</div></a><a href="{:url('index')}"><div class="modna">节点列表</div></a>
+    </div>      
+</div>
+
+<div class="cr"></div>
+<div id="btl">
+<form id="myform">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="alist">
+  <tr>
+    <th colspan="7"><span style="color:red">警告：节点关系着非系统超级管理员的权限，可以修改节点名称，但是不能修改节点英文名字和删除节点！</span></th>
+  </tr>
+  <tr>
+    <th width="5%">排序权重</th>
+    <th width="5%">ID</th>
+    <th width="40%">菜单名称</th>
+    <th width="6%">类型</th>
+    <th width="6%">状态</th>
+    <th width="6%">显示</th>
+    <th width="24%">操作</th>
+  </tr>
+  {$html_tree}
+                
+</table>
+
+<div class="bottom">
+<span><input type="button" value="排    序" class="bginput" id="inpt" style="width:50px"></span>
+</div>
+</form>
+</div>
+<script src="{$Think.HTML_STATIC}/js/jquery.min.js?v=2.1.4"></script>
+<script src="{$Think.HTML_STATIC}/js/plugins/layer/layer.js"></script>
+<script>
+
+    $(document).ready(function(){
+      $('#inpt').click(function(){
+         forms=$('#myform').serializeArray();
+         forms=JSON.stringify(forms); 
+         var index = layer.load();
+         $.ajax({
+              type:'post',
+              url:'{:url("nodeSort")}',
+              data:{json:forms},
+              success:function(data){
+                  layer.close(index);
+                  if(data.code==1)
+                  {
+                     layer.open({
+                          content: data.msg,
+                          scrollbar: false,
+                          yes: function(index, layero){
+                              window.location.href="{:url('index')}";
+                            }
+                      });  
+                  }
+                  else
+                  {
+                      layer.msg(data.msg); 
+                  } 
+              }
+          });
+      })
+    })
+
+    function del(id)
+    {  
+        //询问框
+        layer.confirm('确定要删除该节点吗？', {
+          btn: ['确定','取消'] //按钮
+        },function(){
+              var index = layer.load();
+              $.ajax({
+                  type:'POST',
+                  url:'{:url("nodeDel")}',
+                  data:{id:id},
+                  success:function(data){
+                      layer.close(index);
+                      if(data.code==1)
+                      {
+                          location.reload()
+                      }
+                      else
+                      {
+                          layer.msg(data.msg); 
+                      } 
+                  }
+              }); 
+        }); 
+    }
+</script>
+</body>
+</html>

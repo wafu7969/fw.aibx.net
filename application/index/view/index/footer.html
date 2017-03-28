@@ -1,0 +1,15 @@
+<div style="height:45px;"></div>
+<div class="ftbo">
+      <div class="ftmenu{eq name='action_name' value='index'} on{/eq}" onClick="window.location.href='{:url('index')}'">
+            <div class="mui-icon mui-icon-home"></div>
+            <div>首页</div>
+      </div>
+      <div class="ftmenu{eq name='action_name' value='note'} on{/eq}" onClick="window.location.href='{:url('note')}'">
+            <div class="mui-icon mui-icon-starhalf">{neq name='nodeNum' value='0'}<span class="mui-badge">{$nodeNum}</span>{/neq}</div>
+            <div>小纸条</div>
+      </div>
+      <div class="ftmenu{eq name='action_name' value='my'} on{/eq}" onClick="window.location.href='{:url('my')}'">
+            <div class="mui-icon mui-icon-person"></div>
+            <div>我的</div>
+      </div>
+</div>

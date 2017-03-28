@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+       <head>
+              <meta charset="utf-8">
+              <title>{$Think.config.sitename}</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+              <meta name="apple-mobile-web-app-capable" content="yes">
+              <meta name="apple-mobile-web-app-status-bar-style" content="black">
+              <meta name="format-detection" content="telephone=no">
+              <link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+              <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/icons-extra.css" />
+              <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/style.css"/>
+       </head>
+
+       <body>
+        <header class="mui-bar mui-bar-nav">
+           <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+           <h1 class="mui-title">{$cont_vipcont.title}</h1>
+        </header>
+        <div class="indexCont" style=" padding-top:60px;">
+               <div style="padding:10px;">{$cont_vipcont.content}</div>
+        </div>
+
+       <script src="{$Think.HTML_STATIC}/js/mui.min.js"></script>
+       </body>
+</html>

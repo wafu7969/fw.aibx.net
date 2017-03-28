@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="/static/admin/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+<link href="/static/admin/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+<link href="/static/admin/css/animate.min.css" rel="stylesheet">
+<link href="/static/admin/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+<link rel="stylesheet" href="/static/admin/css/main.css">
+<link rel="stylesheet" href="/static/admin/css/highlight.css">
+<script type="text/javascript" charset="utf-8" src="/static/admin/udeitor/ueditor.config.js?1.4.3.3"></script>
+<script type="text/javascript" charset="utf-8" src="/static/admin/udeitor/ueditor.all.min.js?1.4.3.3"></script>
+<style>
+.control-label font{ color:#F00;}
+.form-group,.m-b{ margin-bottom:5px;}
+.hr-line-dashed{ margin:5px 0px;}
+</style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>修改分类</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="{:url('index')}">返回分类列表</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form method="post" class="form-horizontal" enctype="multipart/form-data"  action="{:url('alter')}">
+                            
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><font>*</font>分类名称：</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" required placeholder="请输入分类名称 多个分类名称请用,隔开" name="name" value="{$type.name}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">seoTitle：</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" placeholder="请输入分类的seo标题" name="seo_title" value="{$type.seo_title
+}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">seoKey：</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" placeholder="请输入分类的seo关键词" name="seo_key" value="{$type.seo_key}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">seoDes：</label>
+
+                                <div class="col-sm-10">
+                                    <textarea name="seo_des" class="form-control" style="height:100px;">{$type.seo_des
+}</textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">封面图片：</label>
+                                <div class="col-sm-10">
+                                    {neq name='$type.pic' value=''}<img src="{$type.pic}" width="100" />{/neq}
+                                    <input type="file" name="pic"/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">栏目描述：</label>
+
+                                <div class="col-sm-10">
+                                    <script id="content" type="text/plain" style="width:100%;height:400px;" name="text">{$type.text}</script>
+                                    <script type="text/javascript">
+                                       var ue = UE.getEditor('content');
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">状态：</label>
+
+                                <div class="col-sm-10">
+                                     <select class="form-control m-b" name="isshow">
+                                        <option value="1" {eq name='$type.isshow' value="显示"}selected{/eq}>显示</option>
+                                        <option value="0" {eq name='$type.isshow' value="隐藏"}selected{/eq}>隐藏</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">排序：</label>
+
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" placeholder="请输入分类排序" name="sort" value="{$type.sort}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <input name="id" value="{$type.id}" type="hidden" />
+                                    <button class="btn btn-primary" type="submit">保存内容</button>
+                                    <button class="btn btn-white" onclick="history.go(-1)">取消</button>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/admin/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/admin/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/static/admin/js/content.min.js?v=1.0.0"></script>
+</body>
+</html>

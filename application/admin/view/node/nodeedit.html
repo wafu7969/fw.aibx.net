@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=7"/>
+<title></title>
+<link href="/static/admin/css/admin.css" rel="stylesheet">
+<script src="/static/admin/js/jquery.min.js?v=2.1.4"></script>
+<script src="/static/admin/js/plugins/layer/layer.js"></script>
+<style>
+.but{ padding:8px 25px; background:green; color:#fff; border:none;cursor:pointer}
+.ipt,.pid{ padding:0 2px; height:27px; line-height:27px; }
+#form{ margin:0px; }
+</style>
+<script type="text/javascript">
+    $(function(){
+        $('#submit').click(function(){
+            var index = layer.load();
+            var forms=$('#form').serialize();
+            $.ajax({
+                type:'POST',
+                url:'{:url("nodeEdit")}',
+                data:forms,
+                success:function(data){
+                    layer.close(index);
+                    if(data.code==1)
+                    {
+                       layer.open({
+                            content: data.msg,
+                            scrollbar: false,
+                            yes: function(index, layero){
+                                        window.location.href="{:url('index')}";
+                                  }
+                        });  
+                    }
+                    else
+                    {
+                        layer.msg(data.msg); 
+                    } 
+                }
+            });
+        })
+    });
+</script>
+</head>
+<body class="warp">
+<div id="artlist" class="addn">
+<div id="btl">
+<form id="form">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="addn">
+  <tr>
+    <th colspan="4">{$title}</th>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>归属节点：</strong></td>
+      <td>
+        <select name="pid" style="width:136px" class="pid">
+            {$select_categorys}
+        </select>
+      </td>
+    </tr>
+    <tr> 
+      <td  height="38" align="right"><strong>节点名称：</strong></td>
+      <td><input type="text" name="title"  class="ipt" size="45" value="{$info.title}" /></td>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>节点名字：</strong></td>
+      <td height="38"><input type="text" name="name" class="ipt" value="{$info.name}"/><strong>注释：</strong>填写控制器名或方法名。</td>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>节点类型：</strong></td>
+      <td height="38">
+        <input type="radio" name="level" value="0" class="ipt" {eq name="info.level" value="0"}checked{/eq} />应用
+        <input type="radio" name="level" value="2" class="ipt" {eq name="info.level" value="2"}checked{/eq} />模块
+        <input type="radio" name="level" value="3" class="ipt" {eq name="info.level" value="3"}checked{/eq} />方法
+      </td>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>显示类型：</strong></td>
+      <td height="38">
+        <input type="radio" name="display" value="0" class="ipt" {eq name="info.display" value="0"}checked{/eq} />隐藏
+        <input type="radio" name="display" value="1" class="ipt" {eq name="info.display" value="1"}checked{/eq} />导航显示
+        <input type="radio" name="display" value="2" class="ipt" {eq name="info.display" value="2"}checked{/eq} />菜单显示
+      </td>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>图标：</strong></td>
+      <td height="38"><input type="text" name="icon" size="45" class="ipt" value="{$info.icon}"/></td>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>备注：</strong></td>
+      <td height="38"><input type="text" name="remark" size="45" class="ipt" value="{$info.remark}"/></td>
+    </tr>
+    <tr> 
+      <td height="38" align="right"><strong>排序：</strong></td>
+      <td height="38"><input type="number" name="sort" size="45" class="ipt" value="{$info.sort}"/><span>注释：按照升序，值越大越往后。</span></td>
+    </tr>
+    <input type="hidden" name="id" value="{$info.id}" />
+    <tr> 
+      <td height="38" colspan="2"><div id="addkey"></div><div class="fabu">
+      <input id="submit" type="button" value="确定" class="but"/>
+      <input id="submit" type="button" onclick="javascript:history.back(-1);" value="返回" class="but"/>
+      </div></td>
+    </tr>
+</table>
+</form>
+</div>
+</div>
+</body>
+</html>

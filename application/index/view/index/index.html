@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>{$Think.config.sitename}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+    <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/icons-extra.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/style.css"/>
+	</head>
+
+	<body>
+		<div id="slider" class="mui-slider" >
+			<div class="mui-slider-group mui-slider-loop">
+		   <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+		   {neq name='returnAdLast' value=''}
+                <div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="{$returnAdLast.url}">
+						<img src="{$returnAdLast.pic}">
+					</a>
+				</div>
+                {/neq}
+                {volist name='returnAd' id='vo'}
+				<div class="mui-slider-item">
+					<a href="{$vo.url}">
+						<img src="{$vo.pic}">
+					</a>
+				</div>
+				{/volist}
+                
+		<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                {neq name='returnAdOne' value=''}
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="{$returnAdOne.url}">
+						<img src="{$returnAdOne.pic}">
+					</a>
+				</div>
+                {/neq}
+			</div>
+			<div class="mui-slider-indicator">
+				{volist name='returnAd' id='vo'}
+                <div class="mui-indicator{eq name='$i' value='1'} mui-active{/eq}"></div>
+                {/volist}
+			</div>
+		</div>
+    <div class='xlsinfos'>
+        <div class='perinfos' onClick="window.location.href='{:url('introuduction')}'">徐箐简介</div>
+        <div class='kcinfos' onClick="window.location.href='{:url('course')}'">课程简介</div>
+    </div>
+
+        <div class="indexCont">
+              <div class="ictitle">最新课程</div>
+              {volist name='$cont_curriculum' id='vo'}
+              <div class="inlist" onClick="window.location.href='{:url('currIndex',array('id'=>$vo.id))}'">
+                    <div class="yyimg"><img src="{$vo.pic}" /></div>
+                    <div class="yyinfo">
+                          <div class="yytitle">{$vo.title}</div>
+                          <div class="yyit">
+                                <div class="yyitleft">
+                                      <div class="yypl price">{eq name="$vo['type']" value='2'}￥{$vo.price}{else}免费{/eq}</div>
+                                </div>
+                                <div class="yyitright">{$vo.create_time|date='m-d',###}</div>
+                          </div>
+                    </div>
+              </div>
+              {/volist}
+              <!--下拉加载-->
+              <div id="loadinguser"></div>
+              {egt name='$cont_curriculumNum' value='$Think.config.page'}<div id="loading">下拉加载更多...</div>{/egt}
+
+        </div>
+        <!--页脚-->
+        {include file="index/footer" /}
+        
+	<script src="{$Think.HTML_STATIC}/js/mui.min.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+  {include file="index/wxShare" /}
+	<script type="text/javascript" charset="utf-8">
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		var slider = mui("#slider");
+		slider.slider({interval: 5000});
+              {egt name='$cont_curriculumNum' value='$Think.config.page'}
+              //下拉加载
+              var offsize = {$Think.config.page};//起始位置(查询数据表时的起始位置)
+              var i = 0; //用于防止下拉重复加载相同数据
+              $(document).ready(function(){  
+                  var range = 0;//距下边界长度/单位px   
+                  var totalheight = 0;
+                  var main = $("#loadinguser");//主体元素  
+                  $(window).scroll(function()
+                  {  
+                      var srollPos = $(window).scrollTop();   
+                      totalheight = parseFloat($(window).height()) + parseFloat(srollPos); 
+                      if(($(document).height()-range) <= totalheight) {
+                          
+                          if(i==0)
+                          {
+                              $('#loading').html("<img src='{$Think.HTML_STATIC}/images/loading.jpg'> 正在努力为您加载...");
+                              i = 1;
+                              $.post("{:url('ajaxGetCurriculum')}",{
+                                  offsize:offsize,
+                                  },function(data){
+                                      
+                                      if(data==0)
+                                      {
+                                          $('#loading').html("已为您加载全部");
+                                      }else{
+                                          main.append(data);
+                                          offsize = offsize+{$Think.config.page};
+                                          i = 0;
+                                      }
+                                      
+                              });
+                          }
+                      }
+                  });  
+              });
+              {/egt}
+
+	</script>
+	</body>
+</html>

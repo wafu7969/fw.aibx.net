@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$Think.config.sitename}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="{$Think.HTML_STATIC}/css/mui.min.css">
+<link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/icons-extra.css" />
+<link rel="stylesheet" type="text/css" href="{$Think.HTML_STATIC}/css/style.css"/>
+</head>
+
+ <body>
+  <div class="currtopimg">
+      <img src="{$cont_curriculum.pic}" />
+  </div>
+  <div class="vmain">
+     <div class="vtitle">{$cont_curriculum.title}</div>
+     <div class="vtext">{$cont_curriculum.text}</div>
+  </div>
+  <div class="indexCont">
+        <div class="ictitle">课程内容</div>
+        {volist name='$voiceList' id='vo'}
+
+        {if condition="($orders== 0) AND ($vo['type'] ==2) AND ($vo.isplay==1) "}
+                <div class="inlist" onClick="window.location.href='{:url('voiceDetail',array('id'=>$vo.id))}'">
+        {elseif  condition="($orders== 0) AND ($vo['type'] ==2) AND ($vo.isplay==0) "/}
+                <div class="inlist"  onClick="tsbuy()">
+        {else /}
+                <div class="inlist" onClick="window.location.href='{:url('voiceDetail',array('id'=>$vo.id))}'">
+        {/if}
+
+              <div class="yyimg"><img src="{$vo.pic}" /><img class="erji" src="{$Think.HTML_STATIC}/images/erji.png"/></div>
+              <div class="yyinfo">
+                    <div class="yytitle">{$vo.title}</div>
+                    <div class="yyit">
+                          <div class="yyitleft">
+                               {eq name='$orders' value='0'}
+                                <div class="yypl price">{eq name="$vo['type']" value='2'}{else}<font>免费</font>{/eq}</div>
+                                {/eq}
+                                <div class="yypl pficon">{$vo.click}</div>
+                                <div class="yypl plicon"> {$vo.commentNum}</div>
+                          </div>
+                          <div class="yyitright">{$vo.create_time|date='m-d',###}</div>
+                    </div>
+              </div>
+        </div>
+        {/volist}
+        <!--下拉加载-->
+        <div id="loadinguser"></div>
+        {egt name='$voiceListNum' value='$Think.config.page'}<div id="loading">下拉加载更多...</div>{/egt}
+
+  </div>
+<div style="height:85px;"></div>
+{eq name='$orders' value='0'}
+<div class="gmkc" onClick="callpay()">购买该套课程￥{$cont_curriculum.price}</div>
+{else}
+{include file="index/footer" /}
+{/eq}
+<script src="{$Think.HTML_STATIC}/js/mui.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+{include file="index/wxShare" /}
+ <script type="text/javascript" charset="utf-8">
+        mui.init({
+               swipeBack:true //启用右滑关闭功能
+        });
+        
+        function tsbuy()
+        {
+             mui.alert('请购买该课程');
+        }
+        {egt name='$voiceListNum' value='$Think.config.page'}
+        //下拉加载
+        var offsize = {$Think.config.page};//起始位置(查询数据表时的起始位置)
+        var i = 0; //用于防止下拉重复加载相同数据
+        $(document).ready(function(){  
+            var range = 0;//距下边界长度/单位px   
+            var totalheight = 0;
+            var main = $("#loadinguser");//主体元素  
+            $(window).scroll(function()
+            {  
+                var srollPos = $(window).scrollTop();   
+                totalheight = parseFloat($(window).height()) + parseFloat(srollPos); 
+                if(($(document).height()-range) <= totalheight) {
+                    
+                    if(i==0)
+                    {
+                        $('#loading').html("<img src='{$Think.HTML_STATIC}/images/loading.jpg'> 正在努力为您加载...");
+                        i = 1;
+                        $.post("{:url('ajaxGetVoice')}",{
+                            offsize:offsize,
+                            currId:{$cont_curriculum.id},
+                            },function(data){
+                                
+                                if(data==0)
+                                {
+                                    $('#loading').html("已为您加载全部");
+                                }else{
+                                    main.append(data);
+                                    offsize = offsize+{$Think.config.page};
+                                    i = 0;
+                                }
+                                
+                        });
+                    }
+                }
+            });  
+        });
+        {/egt}
+
+    {eq name='$orders' value='0'}
+     var working = false;
+     //调用微信JS api 支付
+     function callpay()
+    {
+
+        //首先提交订单
+        $.ajax({
+             type: "post",
+             url: '{:url("addOrder")}',
+             data: {user_id:{$fansInfo.id},curr_id:{$cont_curriculum.id},price:{$cont_curriculum.price}},
+             dataType: "json",
+             success: function(data)
+             {
+                if(data.code==1)
+                {
+                            wx.chooseWXPay({
+                            timestamp: data.data.timestamp,
+                            nonceStr: data.data.nonceStr, // 支付签名随机串，不长于 32 位
+                            package: data.data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                            signType: data.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                            paySign: data.data.paySign, // 支付签名
+                            success: function (res) {
+                var str = JSON.stringify(res);
+                if(res.errMsg == "chooseWXPay:ok")
+                {
+                  //$.post("{:url('upWxJsStatus')}",{order_id:data.order_id},function(data){});
+                  mui.alert('支付成功', '', function(){window.location.reload();});
+                  working = false;
+                }
+                else
+                {
+                      working = false;
+                      mui.alert('支付失败', '', function(){});
+                }
+              }
+            });
+                }
+                else
+                {
+                   working = false;
+                   mui.alert('订单提交失败，请刷新页面重试！');
+                }
+             }
+        });
+
+        
+    }
+
+    {/eq}
+
+ </script>
+ </body>
+</html>

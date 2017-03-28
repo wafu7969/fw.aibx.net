@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>后台首页</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$Think.HTML_STATIC}/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+<link href="{$Think.HTML_STATIC}/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+<!-- Morris -->
+<link href="{$Think.HTML_STATIC}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+<link href="{$Think.HTML_STATIC}/css/animate.min.css" rel="stylesheet">
+<link href="{$Think.HTML_STATIC}/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg sidebar-content">
+    <div class="sidebard-panel">
+        <div class="m-t-md">
+            <h4>数据统计</h4>
+            <div class="row m-t-sm">
+                <div class="col-md-6">
+                    <span class="bar">5,3,9,6,5,9,7,3,5,2</span>
+                    <h5><strong>{$arcCount}</strong> 文章</h5>
+                </div>
+                <div class="col-md-6">
+                    <span class="line">5,3,9,6,5,9,7,3,5,2</span>
+                    <h5><strong>{$ordersNum}</strong> 订单</h5>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4>最新评论</h4>
+            {volist name='cont_comment' id='vo'}
+            <div class="feed-element">
+                <a href="index_3.html#" class="pull-left">
+                    <img class="img-circle" src="{$vo.portrait}">
+                </a>
+                <div class="media-body">
+                    {$vo.text}
+                    <br>
+                    <small class="text-muted">{$vo.create_time|date='Y-m-d',###}</small>
+                </div>
+            </div>
+            {/volist}
+
+
+        </div>
+        
+    </div>
+    <div class="wrapper wrapper-content">
+    
+        <div class="row">
+
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right">今</span>
+                        <h5>今日收入</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$today}元</h1>
+                        <small>总收入</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-info pull-right">月</span>
+                        <h5>月收入</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$month}元</h1>
+                        <small>总收入</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-warning pull-right">总</span>
+                        <h5>总收入</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$total}元</h1>
+                        <small>总收入</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+             <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>最新订单记录(总订单:{$ordersNum}单)</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th width="15%">头像</th>
+                                                    <th width="15%">昵称</th>
+                                                    <th width="30%">订单内容</th>
+                                                    <th width="20%">订单总额</th>
+                                                    <th width="20%">订单时间</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {volist name='orders' id='vo'}
+                                                <tr>
+                                                    <td><img src="{$vo.portrait}" /></td>
+                                                    <td>{$vo.wechaname}</td>
+                                                    <td>{$vo.title}</td>
+                                                    <td>{$vo.price}元</td>
+                                                    <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+                                                </tr>
+                                                {/volist}
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+        </div>
+
+    </div>
+    <script src="{$Think.HTML_STATIC}/js/jquery.min.js?v=2.1.4"></script>
+    <script src="{$Think.HTML_STATIC}/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="{$Think.HTML_STATIC}/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="{$Think.HTML_STATIC}/js/demo/peity-demo.min.js"></script>
+    <script src="{$Think.HTML_STATIC}/js/content.min.js?v=1.0.0"></script>
+    
+</body>
+</html>
